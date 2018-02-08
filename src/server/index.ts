@@ -89,4 +89,4 @@ io.on('connection', (socket: SocketIO.Socket) => {
 });
 // endregion SOCKET.IO
 
-server.listen(process.env.NODE_ENV);
+server.listen(process.env.PORT);

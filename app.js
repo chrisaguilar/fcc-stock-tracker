@@ -187,7 +187,7 @@ io.on('connection', socket => {
     }
   });
 });
-server.listen(process.env.NODE_ENV);
+server.listen(process.env.PORT);
 
 /***/ }),
 /* 4 */
