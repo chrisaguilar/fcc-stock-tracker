@@ -1,0 +1,27 @@
+:global {
+    *, *::before, *::after {
+        box-sizing: border-box;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    html, body {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #app {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+}

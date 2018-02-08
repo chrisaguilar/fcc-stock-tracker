@@ -1,0 +1,9 @@
+{
+    "extends": "@chrisaguilar/tslint-config",
+    "rules": {
+        "completed-docs": false,
+        "jsx-no-multiline-js": false,
+        "jsx-curly-spacing": [true, "never"],
+        "no-default-export": false
+    }
+}
