@@ -14,7 +14,6 @@
         "dev": "concurrently -k --names \"NODEMON,SERVER\" -c \"bgBlue,bgGreen\" \"nodemon app.js\" \"npm run dev:server\"",
         "lint": "prettier --write \"src/**/*.ts{,x}\" --loglevel warn && tslint --project tsconfig.json --fix --out tslint.log",
         "lint:watch": "chokidar \"src/**/*.ts{,x}\" -c \"npm run lint\" --initial --polling",
-        "prestart": "npm run build:prod",
         "start": "NODE_ENV=production node app.js"
     },
     "keywords": [],
