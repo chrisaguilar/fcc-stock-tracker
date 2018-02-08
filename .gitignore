@@ -1,7 +1,5 @@
 .env
-app.js
 tslint.log
 
 .vscode/
 node_modules/
-public/
