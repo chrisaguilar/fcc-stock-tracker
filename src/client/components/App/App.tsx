@@ -33,7 +33,7 @@ class App extends React.Component<any, any> {
 
         try {
             this.setState({ isLoading: true });
-            const res: any = (await axios(`/api/stocks/${symbol}`)).data;
+            const res: any = (await axios(`https://chrismaguilar.com/freecodecamp/backend/stocktracker/api/stocks/${symbol}`)).data;
             const data: any = JSON.stringify(
                 Object.entries(res['Time Series (Daily)']).map(([day, obj]: any) => ({
                     [day]: obj['4. close']
@@ -63,8 +63,11 @@ class App extends React.Component<any, any> {
         }
 
         const chartData: any[] = Object.values(data).sort((a: any, b: any) => utc(a.date).diff(utc(b.date)));
+        const symbols = [];
 
-        this.setState({ chartData, symbols: [...this.state.stockData.keys()] });
+        for (const key of this.state.stockData.keys()) symbols.push(key);
+
+        this.setState({ chartData, symbols });
     };
 
     private readonly _localRemove = (symbol: string): SocketIOClient.Socket => socket.emit('remove', symbol);
@@ -91,7 +94,7 @@ class App extends React.Component<any, any> {
     };
 
     private readonly _socketSetup = (): void => {
-        socket = io('localhost:8080');
+        socket = io();
         socket.on('connect', this._socketJoin);
         socket.on('initial', this._socketInitial);
         socket.on('add', this._socketAdd);

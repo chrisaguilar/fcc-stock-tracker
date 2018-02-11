@@ -187,7 +187,7 @@ io.on('connection', socket => {
     }
   });
 });
-server.listen(process.env.PORT);
+server.listen(parseInt(process.env.PORT, 10));
 
 /***/ }),
 /* 4 */
@@ -313,12 +313,8 @@ module.exports = require("axios");
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const {
-    cpus
-} = __webpack_require__(17);
-const {
-    join
-} = __webpack_require__(0);
+const { cpus } = __webpack_require__(17);
+const { join } = __webpack_require__(0);
 
 const ExtractTextPlugin = __webpack_require__(18);
 const ForkTsCheckerWebpackPlugin = __webpack_require__(19);
@@ -363,15 +359,7 @@ module.exports = function (env, args) {
                             loader: 'babel-loader',
                             options: {
                                 plugins: ['react-hot-loader/babel'],
-                                presets: [
-                                    ['@babel/preset-env', {
-                                        "targets": {
-                                            "browsers": ["last 2 versions", "safari >= 7"]
-                                        },
-                                        "loose": true,
-                                        "modules": false
-                                    }], '@babel/preset-stage-0', '@babel/preset-react'
-                                ]
+                                presets: ['@babel/preset-env', '@babel/preset-stage-0', '@babel/preset-react']
                             }
                         },
                         {

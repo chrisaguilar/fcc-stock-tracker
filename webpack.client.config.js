@@ -1,9 +1,5 @@
-const {
-    cpus
-} = require('os');
-const {
-    join
-} = require('path');
+const { cpus } = require('os');
+const { join } = require('path');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -25,7 +21,7 @@ module.exports = function (env, args) {
         output: {
             filename: '[name].js',
             path: join(__dirname, 'public/js'),
-            publicPath: '/public/js/'
+            publicPath: 'public/js/'
         },
         module: {
             rules: [{
@@ -48,15 +44,7 @@ module.exports = function (env, args) {
                             loader: 'babel-loader',
                             options: {
                                 plugins: ['react-hot-loader/babel'],
-                                presets: [
-                                    ['@babel/preset-env', {
-                                        "targets": {
-                                            "browsers": ["last 2 versions", "safari >= 7"]
-                                        },
-                                        "loose": true,
-                                        "modules": false
-                                    }], '@babel/preset-stage-0', '@babel/preset-react'
-                                ]
+                                presets: ['@babel/preset-env', '@babel/preset-stage-0', '@babel/preset-react']
                             }
                         },
                         {
@@ -121,7 +109,7 @@ module.exports = function (env, args) {
             new HtmlWebpackPlugin({
                 inject: false,
                 template: require('html-webpack-template'),
-                title: 'Hello, World!',
+                title: 'freeCodeCamp Stock Tracker',
                 filename: join(__dirname, 'public/views/index.html'),
                 appMountId: 'app',
                 cache: true,
