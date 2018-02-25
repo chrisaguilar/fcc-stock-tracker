@@ -35,7 +35,7 @@ module.exports = function (env, args) {
             /**
              * The name that your server file(s) will have after being built
              */
-            filename: 'app.js',
+            filename: 'index.js',
             /**
              * The absolute path to the directory where webpack will put your
              * bundled server code.

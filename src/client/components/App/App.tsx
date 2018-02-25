@@ -33,7 +33,7 @@ class App extends React.Component<any, any> {
 
         try {
             this.setState({ isLoading: true });
-            const res: any = (await axios(`https://chrismaguilar.com/freecodecamp/backend/stocktracker/api/stocks/${symbol}`)).data;
+            const res: any = (await axios(`/stock-tracker/api/stocks/${symbol}`)).data;
             const data: any = JSON.stringify(
                 Object.entries(res['Time Series (Daily)']).map(([day, obj]: any) => ({
                     [day]: obj['4. close']
@@ -94,7 +94,7 @@ class App extends React.Component<any, any> {
     };
 
     private readonly _socketSetup = (): void => {
-        socket = io();
+        socket = io({ path: '/stock-tracker/socket.io' });
         socket.on('connect', this._socketJoin);
         socket.on('initial', this._socketInitial);
         socket.on('add', this._socketAdd);

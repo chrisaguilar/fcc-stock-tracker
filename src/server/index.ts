@@ -3,7 +3,6 @@ import { createServer, Server } from 'http';
 import { join } from 'path';
 import { promisify } from 'util';
 
-import dotenv from 'dotenv';
 import ejs from 'ejs';
 import express, { Application, Request, Response } from 'express';
 import morgan from 'morgan';
@@ -15,8 +14,6 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import { stocks } from '~server/api';
 // endregion IMPORTS
-
-dotenv.config();
 
 // region VARIABLES
 // tslint:disable:no-unbound-method
@@ -34,10 +31,11 @@ const io: SocketIO.Server = Socket(server);
 // endregion VARIABLES
 
 // region EXPRESS
-app.enable('trust proxy');
+// app.enable('trust proxy');
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
-app.set('views', join(__dirname, 'public/views'));
+app.set('views', join(__dirname, 'client'));
+app.set('port', parseInt(process.env.PORT as string, 10));
 
 
 if (process.env.NODE_ENV !== 'production') {
@@ -52,10 +50,8 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.use('/api/stocks', stocks);
-app.use('/public', express.static(join(__dirname, 'public')));
-app.get('*', (req: Request, res: Response) => {
-    res.render('index');
-});
+app.use('/', express.static(join(__dirname, 'client')));
+app.get('/', (req: Request, res: Response) => res.render('index'));
 
 // endregion EXPRESS
 
@@ -89,4 +85,4 @@ io.on('connection', (socket: SocketIO.Socket) => {
 });
 // endregion SOCKET.IO
 
-server.listen(parseInt(process.env.PORT as string, 10));
+server.listen(app.get('port'), () => console.log(`/stock-tracker listening on port ${app.get('port')}`));

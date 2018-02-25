@@ -104,31 +104,28 @@ const path_1 = __webpack_require__(0);
 
 const util_1 = __webpack_require__(5);
 
-const dotenv_1 = __importDefault(__webpack_require__(6));
-
-const ejs_1 = __importDefault(__webpack_require__(7));
+const ejs_1 = __importDefault(__webpack_require__(6));
 
 const express_1 = __importDefault(__webpack_require__(1));
 
-const morgan_1 = __importDefault(__webpack_require__(8));
+const morgan_1 = __importDefault(__webpack_require__(7));
 
-const redis_1 = __importDefault(__webpack_require__(9));
+const redis_1 = __importDefault(__webpack_require__(8));
 
-const socket_io_1 = __importDefault(__webpack_require__(10));
+const socket_io_1 = __importDefault(__webpack_require__(9));
 
 const webpack_1 = __importDefault(__webpack_require__(2));
 
-const webpack_dev_middleware_1 = __importDefault(__webpack_require__(11));
+const webpack_dev_middleware_1 = __importDefault(__webpack_require__(10));
 
-const webpack_hot_middleware_1 = __importDefault(__webpack_require__(12));
+const webpack_hot_middleware_1 = __importDefault(__webpack_require__(11));
 
-const api_1 = __webpack_require__(13);
+const api_1 = __webpack_require__(12);
 
-dotenv_1.default.config();
 const app = express_1.default();
 const client = redis_1.default.createClient();
 
-const config = __webpack_require__(16)();
+const config = __webpack_require__(15)();
 
 const compiler = webpack_1.default(config);
 const HDelAsync = util_1.promisify(client.hdel).bind(client);
@@ -137,10 +134,10 @@ const HGetAllAsync = util_1.promisify(client.hgetall).bind(client);
 const HSetAsync = util_1.promisify(client.hset).bind(client);
 const server = http_1.createServer(app);
 const io = socket_io_1.default(server);
-app.enable('trust proxy');
 app.engine('html', ejs_1.default.renderFile);
 app.set('view engine', 'html');
-app.set('views', path_1.join(__dirname, 'public/views'));
+app.set('views', path_1.join(__dirname, 'client'));
+app.set('port', parseInt(process.env.PORT, 10));
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan_1.default('dev'));
@@ -152,10 +149,8 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.use('/api/stocks', api_1.stocks);
-app.use('/public', express_1.default.static(path_1.join(__dirname, 'public')));
-app.get('*', (req, res) => {
-  res.render('index');
-});
+app.use('/', express_1.default.static(path_1.join(__dirname, 'client')));
+app.get('/', (req, res) => res.render('index'));
 io.on('connection', socket => {
   socket.on('join', async () => {
     try {
@@ -187,7 +182,7 @@ io.on('connection', socket => {
     }
   });
 });
-server.listen(parseInt(process.env.PORT, 10));
+server.listen(app.get('port'), () => console.log(`/stock-tracker listening on port ${app.get('port')}`));
 
 /***/ }),
 /* 4 */
@@ -205,46 +200,40 @@ module.exports = require("util");
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = require("dotenv");
+module.exports = require("ejs");
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
-module.exports = require("ejs");
+module.exports = require("morgan");
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("morgan");
+module.exports = require("redis");
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("redis");
+module.exports = require("socket.io");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("socket.io");
+module.exports = require("webpack-dev-middleware");
 
 /***/ }),
 /* 11 */
 /***/ (function(module, exports) {
 
-module.exports = require("webpack-dev-middleware");
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
 module.exports = require("webpack-hot-middleware");
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -258,10 +247,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-__export(__webpack_require__(14));
+__export(__webpack_require__(13));
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -277,7 +266,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-const axios_1 = __importDefault(__webpack_require__(15));
+const axios_1 = __importDefault(__webpack_require__(14));
 
 const express_1 = __importDefault(__webpack_require__(1));
 
@@ -304,28 +293,28 @@ stocks.get('/:symbol', async (req, res, next) => {
 });
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("axios");
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { cpus } = __webpack_require__(17);
+const { cpus } = __webpack_require__(16);
 const { join } = __webpack_require__(0);
 
-const ExtractTextPlugin = __webpack_require__(18);
-const ForkTsCheckerWebpackPlugin = __webpack_require__(19);
-const HtmlWebpackHarddiskPlugin = __webpack_require__(20);
-const HtmlWebpackPlugin = __webpack_require__(21);
-const TsConfigPathsPlugin = __webpack_require__(22);
-const UglifyJsPlugin = __webpack_require__(23);
+const ExtractTextPlugin = __webpack_require__(17);
+const ForkTsCheckerWebpackPlugin = __webpack_require__(18);
+const HtmlWebpackHarddiskPlugin = __webpack_require__(19);
+const HtmlWebpackPlugin = __webpack_require__(20);
+const TsConfigPathsPlugin = __webpack_require__(21);
+const UglifyJsPlugin = __webpack_require__(22);
 const webpack = __webpack_require__(2);
 
 const extractSass = new ExtractTextPlugin({
-    filename: join('../css/style.css'),
+    filename: 'style.css',
     disable: process.env.NODE_ENV !== 'production'
 });
 
@@ -335,8 +324,8 @@ module.exports = function (env, args) {
         entry: ['babel-polyfill', join(__dirname, 'src/client/index.tsx')],
         output: {
             filename: '[name].js',
-            path: join(__dirname, 'public/js'),
-            publicPath: '/public/js/'
+            path: join(__dirname, 'client'),
+            publicPath: '/stock-tracker/'
         },
         module: {
             rules: [{
@@ -392,7 +381,7 @@ module.exports = function (env, args) {
                                 loader: 'postcss-loader',
                                 options: {
                                     ident: 'postcss',
-                                    plugins: (loader) => [__webpack_require__(24)()]
+                                    plugins: (loader) => [__webpack_require__(23)()]
                                 }
                             },
                             {
@@ -423,9 +412,9 @@ module.exports = function (env, args) {
             }),
             new HtmlWebpackPlugin({
                 inject: false,
-                template: __webpack_require__(25),
-                title: 'Hello, World!',
-                filename: join(__dirname, 'public/views/index.html'),
+                template: __webpack_require__(24),
+                title: 'freeCodeCamp Stock Tracker',
+                filename: 'index.html',
                 appMountId: 'app',
                 cache: true,
                 minify: {
@@ -472,55 +461,55 @@ module.exports = function (env, args) {
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = require("os");
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = require("extract-text-webpack-plugin");
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = require("fork-ts-checker-webpack-plugin");
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = require("html-webpack-harddisk-plugin");
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = require("html-webpack-plugin");
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = require("tsconfig-paths-webpack-plugin");
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = require("uglifyjs-webpack-plugin");
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports) {
 
 module.exports = require("postcss-cssnext");
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports) {
 
 module.exports = require("html-webpack-template");

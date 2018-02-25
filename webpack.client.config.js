@@ -10,7 +10,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 
 const extractSass = new ExtractTextPlugin({
-    filename: join('../css/style.css'),
+    filename: 'style.css',
     disable: process.env.NODE_ENV !== 'production'
 });
 
@@ -20,8 +20,8 @@ module.exports = function (env, args) {
         entry: ['babel-polyfill', join(__dirname, 'src/client/index.tsx')],
         output: {
             filename: '[name].js',
-            path: join(__dirname, 'public/js'),
-            publicPath: 'public/js/'
+            path: join(__dirname, 'client'),
+            publicPath: '/stock-tracker/'
         },
         module: {
             rules: [{
@@ -110,7 +110,7 @@ module.exports = function (env, args) {
                 inject: false,
                 template: require('html-webpack-template'),
                 title: 'freeCodeCamp Stock Tracker',
-                filename: join(__dirname, 'public/views/index.html'),
+                filename: 'index.html',
                 appMountId: 'app',
                 cache: true,
                 minify: {
